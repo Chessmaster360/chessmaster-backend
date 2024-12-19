@@ -7,7 +7,7 @@ Repositorio Backend de la plataforma Chessmaster360 con las funcionalidades de: 
 
 Antes de comenzar, asegúrate de tener instalados los siguientes programas:
 
-- **Java 11 o superior** (Para ejecutar el backend con Spring Boot)
+- **Java 17** (Para ejecutar el backend con Spring Boot)
 - **Maven** (Para la gestión de dependencias y construcción del proyecto)
 - **Docker** y **Docker Compose** (Para la contenedorización y ejecución del entorno)
 - **MongoDB** (Para almacenar los datos, pero se usa en Docker en este caso)
