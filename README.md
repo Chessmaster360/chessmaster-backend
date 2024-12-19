@@ -1,4 +1,4 @@
-# Chessmaster Backend
+# Chessmaster Backend 💻♟️
 
 Este es el repositorio del backend de la plataforma Chessmaster, desarrollada con **Spring Boot**, **MongoDB**, y **Docker**.
 Repositorio Backend de la plataforma Chessmaster360 con las funcionalidades de: Gestión de usuarios y autenticación. Almacenamiento de partidas (MongoDB). Exposición de APIs REST para conectar con el frontend.
