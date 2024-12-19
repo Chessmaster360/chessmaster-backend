@@ -1,0 +1,29 @@
+services:
+  mongo:  # Servicio para MongoDB
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db  # Persistencia de datos en volumen
+    networks:
+      - backend-network
+
+  backend:  # Servicio para tu backend
+    build:
+      context: .
+    container_name: backend
+    ports:
+      - "8181:8181"
+    environment:
+      - spring.data.mongodb.uri=mongodb://mongo:27017/Chessmaster  # Configura la URI de MongoDB
+    depends_on:
+      - mongo  # El servicio depende de MongoDB
+    networks:
+      - backend-network
+
+volumes:
+  mongo-data:  # Volumen para MongoDB
+
+networks:
+  backend-network:  # Red compartida entre backend y MongoDB
