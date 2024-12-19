@@ -1,4 +1,4 @@
-package com.chessmaster.exception;
+package com.chessmaster.backend.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {

@@ -1,7 +1,8 @@
-package com.chessmaster.model;
+package com.chessmaster.backend.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import com.chessmaster.backend.model.Move;  // Asegúrate de que este import esté correcto
 
 import java.util.List;
 

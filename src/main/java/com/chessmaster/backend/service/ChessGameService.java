@@ -1,7 +1,7 @@
-package com.chessmaster.service;
+package com.chessmaster.backend.service;
 
-import com.chessmaster.model.ChessGame;
-import com.chessmaster.repository.ChessGameRepository;
+import com.chessmaster.backend.model.ChessGame;
+import com.chessmaster.backend.repository.ChessGameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
-package com.chessmaster.repository;
+package com.chessmaster.backend.repository;
 
-import com.chessmaster.model.ChessGame;
+import com.chessmaster.backend.model.ChessGame;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface ChessGameRepository extends MongoRepository<ChessGame, String> {
