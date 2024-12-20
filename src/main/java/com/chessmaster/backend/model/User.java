@@ -19,20 +19,18 @@ public class User {
     private String password;
     private List<String> roles;
     private int eloRating;
-    List<String> games;
-    List<String> friends;
-    List<String> friendRequests;
-    List<String> sentFriendRequests;
-    List<String> notifications;
-    List<String> achievements;
+    private List<String> games;
+    private List<String> friends;
+    private List<String> friendRequests;
+    private List<String> sentFriendRequests;
+    private List<String> notifications;
+    private List<String> achievements;
 
-    void updateEloRating(int newEloRating) {
+    public void updateEloRating(int newEloRating) {
         this.eloRating = newEloRating;
     }
 
-    void addAchievement(String achievement) {
+    public void addAchievement(String achievement) {
         this.achievements.add(achievement);
     }
-
-
 }
