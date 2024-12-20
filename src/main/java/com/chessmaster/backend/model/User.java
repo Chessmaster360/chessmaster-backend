@@ -17,7 +17,7 @@ public class User {
     private String username;
     private String email;
     private String password;
-    private String role; // Puede ser 'USER', 'ADMIN', etc.
+    private List<String> roles;
     private int eloRating;
     List<String> games;
     List<String> friends;
