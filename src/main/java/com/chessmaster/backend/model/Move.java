@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "moves")
 public class Move {
+    
     private String move;
     private String evaluation;
 }
