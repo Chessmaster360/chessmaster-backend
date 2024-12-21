@@ -14,8 +14,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     public CustomUserDetailsService() {
         // Crear usuarios en memoria
-        users.put("admin", "$2a$10$7Qpe9t0nIy2IjAaX.XZ1jO2Jc7hxokL4MI2aOQYPVYByXkKxL.GI2"); // Contraseña: admin123
         users.put("user", "$2a$10$PucEeM9P/AgmEr5lIHDQfujmYCeF8wxZ7MJfOIMlweIM8Q/4rP8XS");  // Contraseña: user123
+        users.put("geoffrey", "prueba123");  // Contraseña: user123
     }
 
     @Override
