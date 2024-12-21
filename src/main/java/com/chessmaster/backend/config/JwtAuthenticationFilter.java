@@ -45,7 +45,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         }
-    
         // Continúa con el filtro incluso si no hay token
         filterChain.doFilter(request, response);
     }    

@@ -25,13 +25,14 @@ public class JwtTokenProvider {
             .compact();
     }
 
-    // Obtener el username desde el token
+    // Obtener el nombre de usuario del token JWT
     public String getUsernameFromToken(String token) {
-        return Jwts.parser()
+        Claims claims = Jwts.parser()
             .setSigningKey(SECRET_KEY)
             .parseClaimsJws(token)
-            .getBody()
-            .getSubject();
+            .getBody();
+
+        return claims.getSubject();
     }
 
     // Validar el token JWT
