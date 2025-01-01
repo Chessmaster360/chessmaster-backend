@@ -7,48 +7,54 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
 
-    private final String SECRET_KEY = "mySecretKey";
+    @Value("${jwt.secret}")
+    private String secretKey;
 
-    // Generar un token JWT
+    @Value("${jwt.expiration}")
+    private long expirationTime;
+
     public String generateToken(String username) {
         return Jwts.builder()
             .setSubject(username)
             .setIssuedAt(new Date())
-            .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 día
-            .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+            .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+            .signWith(SignatureAlgorithm.HS512, secretKey)
             .compact();
     }
 
-    // Obtener el nombre de usuario del token JWT
     public String getUsernameFromToken(String token) {
         Claims claims = Jwts.parser()
-            .setSigningKey(SECRET_KEY)
+            .setSigningKey(secretKey)
             .parseClaimsJws(token)
             .getBody();
 
         return claims.getSubject();
     }
 
-    // Validar el token JWT
+    private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
+
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
-            return true; // Token válido
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            return true;
         } catch (ExpiredJwtException e) {
-            System.out.println("Token expirado: " + e.getMessage());
+            logger.warn("Token expirado: {}", e.getMessage());
         } catch (MalformedJwtException e) {
-            System.out.println("Token mal formado: " + e.getMessage());
+            logger.warn("Token mal formado: {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
-            System.out.println("Token no soportado: " + e.getMessage());
+            logger.warn("Token no soportado: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
-            System.out.println("Token vacío: " + e.getMessage());
+            logger.warn("Token vacío: {}", e.getMessage());
         }
-        return false; // Token inválido
+        return false;
     }
 }
