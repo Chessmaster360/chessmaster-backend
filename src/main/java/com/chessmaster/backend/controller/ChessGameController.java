@@ -1,63 +1,102 @@
 package com.chessmaster.backend.controller;
 
-import com.chessmaster.backend.model.ChessGame;
-import com.chessmaster.backend.repository.ChessGameRepository;
+import com.chessmaster.backend.service.ChessComService;
 import com.chessmaster.backend.service.ChessGameService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*; 
+import com.chessmaster.backend.model.ChessGame;
 import com.chessmaster.backend.model.Move;
 import com.chessmaster.backend.exception.ResourceNotFoundException;
 
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/games")
+@RequestMapping("/api")
 public class ChessGameController {
 
+    private final ChessComService chessComService;
+    private final ChessGameService chessGameService;
+
     @Autowired
-    private ChessGameService chessGameService;
-
-    // Endpoint para crear un juego
-    @PostMapping("/upload-pgn")
-    public ChessGame uploadGame(@RequestBody ChessGame game) {
-        return chessGameService.saveGame(game);
+    public ChessGameController(ChessComService chessComService, ChessGameService chessGameService) {
+        this.chessComService = chessComService;
+        this.chessGameService = chessGameService;
     }
 
-    // Endpoint to get the current state of the board
-    @GetMapping("/{id}/board")
-    public ChessGame getBoardState(@PathVariable String id) {
-        Optional<ChessGame> game = chessGameService.getGameById(id);
-        return game.orElseThrow(() -> new ResourceNotFoundException("Game not found with id " + id));
-    }
+    // Endpoint para obtener partidas recientes desde una plataforma soportada
+    @GetMapping("/games")
+    public ResponseEntity<Map<String, Object>> getGames(
+            @RequestParam String platform,
+            @RequestParam String username) {
 
-    // Endpoint to advance to the next move
-    @PostMapping("/{id}/next-move")
-    public Move advanceToNextMove(@PathVariable String id) {
-        Optional<ChessGame> game = chessGameService.getGameById(id);
-        if (game.isPresent()) {
-            // Logic to advance to the next move
-            // This is a placeholder, you need to implement the actual logic
-            Move nextMove = new Move();
-            // Update the game state with the next move
-            return nextMove;
-        } else {
-            throw new ResourceNotFoundException("Game not found with id " + id);
+        if (!platform.equalsIgnoreCase("Chess.com")) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Solo se admite Chess.com en este endpoint"));
         }
-    }
-     // Endpoint to evaluate a move
-     @PostMapping("/{id}/evaluate-move")
-     public String evaluateMove(@PathVariable String id, @RequestBody Move move) {
-         Optional<ChessGame> game = chessGameService.getGameById(id);
-         if (game.isPresent()) {
-             // Logic to evaluate the move
-             // This is a placeholder, you need to implement the actual logic
-             String evaluation = "Good move";
-             return evaluation;
-         } else {
-             throw new ResourceNotFoundException("Game not found with id " + id);
-         }
-     }
-}
 
+        Map<String, Object> response = new HashMap<>();
+        response.put("games", chessComService.obtenerPartidas(username));
+
+        return ResponseEntity.ok(response);
+    }
+
+    // Endpoint para crear un nuevo juego en la base de datos
+    @PostMapping("/games")
+    public ResponseEntity<ChessGame> createGame(@RequestBody ChessGame game) {
+        ChessGame createdGame = chessGameService.createGame(game);
+        return ResponseEntity.ok(createdGame);
+    }
+
+    // Endpoint para avanzar al siguiente movimiento de un juego existente
+    @PostMapping("/games/{id}/next-move")
+    public ResponseEntity<Move> advanceToNextMove(@PathVariable String id) {
+        ChessGame game = chessGameService.getGameById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Game not found with id " + id));
+
+        // Lógica placeholder para obtener el siguiente movimiento
+        Move nextMove = chessGameService.calculateNextMove(game);
+
+        // Actualizar el juego con el movimiento calculado
+        chessGameService.advanceMove(game, nextMove);
+        return ResponseEntity.ok(nextMove);
+    }
+
+    // Endpoint para analizar un juego basado en su PGN
+    @PostMapping("/analyze")
+    public ResponseEntity<Map<String, Object>> analyzeGame(@RequestBody Map<String, String> requestBody) {
+        String pgn = requestBody.get("pgn");
+
+        if (pgn == null || pgn.isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "El PGN es obligatorio para analizar"));
+        }
+
+        // Simulación del análisis (puedes integrar Stockfish aquí)
+        Map<String, Object> analysisResult = new HashMap<>();
+        analysisResult.put("analysis", "Análisis simulado del PGN");
+
+        return ResponseEntity.ok(analysisResult);
+    }
+
+    // Endpoint para obtener el estado actual del tablero de un juego
+    @GetMapping("/games/{id}/board")
+    public ResponseEntity<ChessGame> getBoardState(@PathVariable String id) {
+        ChessGame game = chessGameService.getGameById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Game not found with id " + id));
+        return ResponseEntity.ok(game);
+    }
+
+    // Endpoint para evaluar un movimiento en un juego específico
+    @PostMapping("/games/{id}/evaluate-move")
+    public ResponseEntity<Map<String, String>> evaluateMove(@PathVariable String id, @RequestBody Move move) {
+        ChessGame game = chessGameService.getGameById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Game not found with id " + id));
+
+        // Lógica placeholder para evaluar el movimiento
+        String evaluation = chessGameService.evaluateMove(game, move);
+
+        return ResponseEntity.ok(Map.of("evaluation", evaluation));
+    }
+}
