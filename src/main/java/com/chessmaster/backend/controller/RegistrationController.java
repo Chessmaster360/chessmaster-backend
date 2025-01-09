@@ -1,3 +1,5 @@
+package com.chessmaster.backend.controller;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -28,5 +30,8 @@ public class RegistrationController {
 
         users.put(username, passwordEncoder.encode(password));
         return "Usuario registrado exitosamente";
+        // Additional registration logic...
     }
+    
+    // ...other methods...
 }
