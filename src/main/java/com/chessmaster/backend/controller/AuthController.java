@@ -32,4 +32,8 @@ public class AuthController {
 
         throw new RuntimeException("Credenciales inválidas");
     }
+
+    public Map<String, String> getUsers() {
+        return users;
+    }
 }

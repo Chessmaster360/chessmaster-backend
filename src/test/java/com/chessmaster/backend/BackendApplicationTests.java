@@ -1,13 +1,23 @@
 package com.chessmaster.backend;
 
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
-@SpringBootTest
+
+@EnableWebSecurity
+@DirtiesContext
+@SpringBootTest()
+@ActiveProfiles("test")
 class BackendApplicationTests {
 
 	@Test
 	void contextLoads() {
 	}
+
 
 }
