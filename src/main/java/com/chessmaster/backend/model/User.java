@@ -33,4 +33,16 @@ public class User {
     public void addAchievement(String achievement) {
         this.achievements.add(achievement);
     }
+
+    public void setUsername(String admin) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setPassword(String encode) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setRoles(List<String> singletonList) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

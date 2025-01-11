@@ -1,6 +1,5 @@
 package com.chessmaster.backend;
 
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
